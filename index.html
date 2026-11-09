@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <title>AquaSmart - Суды бақылау және талдау жүйесі</title>
+    <!-- Chart.js кітапханасы -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #eef5fc; margin: 20px; color: #333; }
+        .container { max-width: 850px; margin: auto; background: white; padding: 25px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .slogan-banner { background: linear-gradient(135deg, #0288d1, #005b9f); color: white; padding: 15px; border-radius: 12px; text-align: center; margin-bottom: 20px; }
+        .slogan-banner h3 { margin: 0; font-size: 20px; }
+        .slogan-banner p { margin: 5px 0 0 0; font-size: 13px; opacity: 0.9; }
+        .btn-group { text-align: center; margin-bottom: 20px; }
+        .btn-group button { background: #0288d1; color: white; border: none; padding: 10px 20px; margin: 5px; cursor: pointer; border-radius: 8px; font-weight: bold; }
+        .btn-group button:hover { background: #01579b; }
+        .calculator-card { background: #f0f7ff; border: 2px solid #b3e5fc; padding: 20px; border-radius: 12px; margin-top: 30px; }
+        .form-group { margin-bottom: 15px; text-align: left; }
+        .form-group label { display: block; font-weight: bold; margin-bottom: 5px; }
+        .form-group input { width: 95%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
+        .calc-btn { background: #2e7d32; color: white; border: none; padding: 12px 24px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 10px; }
+        .calc-btn:hover { background: #1b5e20; }
+        
+        .result-box { margin-top: 20px; padding: 15px; background: #e8f5e9; border-left: 5px solid #2e7d32; border-radius: 6px; display: none; }
+        /* Ақылды ескерту хабарламаларының стилі */
+        .alert-box { margin-top: 15px; padding: 15px; background: #fff3cd; border-left: 5px solid #ffc107; border-radius: 6px; display: none; }
+        .alert-box h4 { margin-top: 0; color: #856404; }
+        .recommendation-list { margin: 5px 0 0 20px; padding: 0; }
+        .recommendation-list li { margin-bottom: 8px; line-height: 1.4; }
+    </style>
+
+<style>
+*{box-sizing:border-box}body{font-family:'Segoe UI',Tahoma,sans-serif;background:linear-gradient(135deg,#eaf7ff,#f5fbff);margin:0;color:#17324d}
+.container{max-width:1100px;margin:25px auto;padding:0 18px}
+.hero{background:linear-gradient(135deg,#0277bd,#00a6d6);color:#fff;border-radius:24px;padding:28px 32px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 12px 30px #087bb330}
+.badge{font-size:13px;font-weight:800;letter-spacing:1.5px;opacity:.9}.hero h1{margin:8px 0;font-size:30px}.hero p{margin:0;opacity:.9}.hero-drop{font-size:78px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}.tab,.chart-head button{border:0;background:#fff;padding:11px 16px;border-radius:12px;cursor:pointer;color:#156082;font-weight:700;box-shadow:0 3px 12px #164b6615}.tab.active,.tab:hover{background:#0288d1;color:#fff}
+.section{display:none;background:#fff;border-radius:20px;padding:25px;box-shadow:0 6px 24px #164b6612}.section.active{display:block}.section h2{margin-top:0;color:#0277bd}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.stat{padding:18px;border-radius:16px;background:#f2faff;border:1px solid #d7effb}.stat span,.stat small{display:block;color:#607d8b}.stat b{display:block;font-size:25px;margin:8px 0;color:#026c9d}
+.chart-card,.panel,.ai-box,.ai-response,.leaderboard{margin-top:18px;padding:20px;border:1px solid #e0edf3;border-radius:16px}.chart-head{display:flex;justify-content:space-between;align-items:center;gap:10px}.chart-head h3{margin:0}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.warning{background:#fff7dc;padding:14px;border-radius:10px;color:#785b00}.progress{height:10px;background:#e6eef2;border-radius:8px;margin:14px 0}.progress span{display:block;height:100%;background:#26a69a;border-radius:8px}.forecast{font-size:34px;font-weight:800;color:#0288d1}
+.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.field label{display:block;font-weight:700;margin-bottom:7px}.field input,.chat input{width:100%;padding:13px;border:1px solid #cbdce5;border-radius:10px;font-size:15px}.main-btn{width:100%;margin-top:18px;padding:14px;border:0;border-radius:12px;background:#2e7d32;color:#fff;font-size:16px;font-weight:800;cursor:pointer}
+.result{margin-top:20px;padding:20px;background:#eefaf0;border-radius:16px}.hidden{display:none}.result-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.result-grid div{background:#fff;padding:16px;border-radius:12px}.result-grid span{display:block;color:#607d8b}.result-grid strong{display:block;font-size:23px;margin-top:7px;color:#2e7d32}
+.ai-box{display:flex;gap:16px;align-items:center;background:#f0f9ff}.ai-avatar{font-size:48px}.quick{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}.quick button{border:0;padding:12px 15px;border-radius:10px;background:#e5f5fc;color:#006a96;font-weight:700;cursor:pointer}.ai-response{background:#f7fbff;min-height:90px}.chat{display:flex;gap:10px;margin-top:16px}.chat button{border:0;background:#0277bd;color:#fff;padding:0 20px;border-radius:10px;font-weight:700}
+.eco{display:flex;align-items:center;gap:25px;background:#effaf2;padding:22px;border-radius:18px}.circle{width:130px;height:130px;border-radius:50%;background:conic-gradient(#2e9b54 0 82%,#dcefe2 82%);display:flex;align-items:center;justify-content:center;flex-direction:column;font-size:34px;font-weight:800;color:#24733e}.circle small{font-size:14px}.goals{display:grid;gap:10px;margin-top:18px}.goal{padding:15px;background:#f8fbfc;border-radius:12px;border:1px solid #e3edf1;display:flex;justify-content:space-between}.goal b{color:#2e7d32}.leaderboard p{margin:10px 0;padding:10px;background:#f6fafc;border-radius:9px}footer{text-align:center;padding:25px;color:#607d8b}
+@media(max-width:800px){.cards{grid-template-columns:1fr 1fr}.grid2,.form-grid{grid-template-columns:1fr}.result-grid{grid-template-columns:1fr}.hero-drop{display:none}}
+@media(max-width:500px){.cards{grid-template-columns:1fr}.hero h1{font-size:23px}.section{padding:18px}}
+</style>
+
+</head>
+
+<body>
+<div class="container">
+  <div class="hero">
+    <div>
+      <div class="badge">💧 AQUASMART 2.0</div>
+      <h1>Әр тамшыны есепте — болашақты сақта!</h1>
+      <p>Дерек + Есептеу + ЖИ талдауы + Болжам + Эко-бақылау</p>
+    </div>
+    <div class="hero-drop">💧</div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showSection('dashboard',this)">📊 Дашборд</button>
+    <button class="tab" onclick="showSection('calculator',this)">🧮 Калькулятор</button>
+    <button class="tab" onclick="showSection('ai',this)">🤖 AquaAI</button>
+    <button class="tab" onclick="showSection('goals',this)">🌱 Eco Score</button>
+  </div>
+
+  <section id="dashboard" class="section active">
+    <h2>📊 Су тұтыну дашборды</h2>
+    <div class="cards">
+      <div class="stat"><span>💧 Бүгін</span><b>142 л</b><small>мақсат: 160 л</small></div>
+      <div class="stat"><span>📅 Осы ай</span><b id="monthLiters">3 200 л</b><small>өткен айға қарағанда −8%</small></div>
+      <div class="stat"><span>💰 Үнем</span><b id="moneySave">384 ₸</b><small>айлық болжам</small></div>
+      <div class="stat"><span>🌱 Eco Score</span><b id="scoreTop">82/100</b><small>Жақсы нәтиже!</small></div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-head">
+        <h3>Су тұтыну динамикасы</h3>
+        <div>
+          <button onclick="updateChart('daily')">Күн</button>
+          <button onclick="updateChart('weekly')">Апта</button>
+          <button onclick="updateChart('monthly')">Ай</button>
+        </div>
+      </div>
+      <canvas id="waterChart"></canvas>
+    </div>
+
+    <div class="grid2">
+      <div class="panel">
+        <h3>🚨 Ақылды бақылау</h3>
+        <div class="warning">⚠️ Түнгі уақытта су шығыны әдеттегіден 24% жоғары.</div>
+        <p>Құбыр немесе краннан су ағуын тексеріңіз.</p>
+        <div class="progress"><span style="width:76%"></span></div>
+        <small>Қалыпты тұтыну деңгейі: 76%</small>
+      </div>
+      <div class="panel">
+        <h3>🔮 Келесі айға болжам</h3>
+        <div class="forecast">≈ 3 050 л</div>
+        <p>Қазіргі үнемдеу қарқыны сақталса, келесі айда шамамен 150 л аз су жұмсауыңыз мүмкін.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="calculator" class="section">
+    <h2>🧮 Жеке су шығынын есептеу</h2>
+    <div class="form-grid">
+      <div class="field"><label>🚿 Душ (мин/күн)</label><input id="shower" type="number" value="15" min="0"></div>
+      <div class="field"><label>🚰 Кран (мин/күн)</label><input id="faucet" type="number" value="20" min="0"></div>
+      <div class="field"><label>🧺 Кір жуу (рет/апта)</label><input id="washing" type="number" value="5" min="0"></div>
+      <div class="field"><label>👨‍👩‍👧‍👦 Отбасы мүшелері</label><input id="family" type="number" value="4" min="1"></div>
+    </div>
+    <button class="main-btn" onclick="calculate()">✨ Есептеу және ЖИ талдауын алу</button>
+
+    <div id="calcResult" class="result hidden">
+      <div class="result-grid">
+        <div><span>Айлық шығын</span><strong id="totalWater">0 л</strong></div>
+        <div><span>Үнемдеу мүмкіндігі</span><strong id="savedWater">0 л</strong></div>
+        <div><span>Ақшалай үнем</span><strong id="savedMoney">0 ₸</strong></div>
+      </div>
+      <div id="recommendations"></div>
+    </div>
+  </section>
+
+  <section id="ai" class="section">
+    <h2>🤖 AquaAI — ақылды су кеңесшісі</h2>
+    <div class="ai-box">
+      <div class="ai-avatar">🤖</div>
+      <div>
+        <h3>AquaAI дайын!</h3>
+        <p>Сіздің су тұтыну әдеттеріңізді талдап, үнемдеу жолдарын ұсына аламын.</p>
+      </div>
+    </div>
+
+    <div class="quick">
+      <button onclick="aiAnswer('analysis')">📈 Менің тұтынуымды талда</button>
+      <button onclick="aiAnswer('saving')">💧 Қалай көбірек үнемдеймін?</button>
+      <button onclick="aiAnswer('leak')">🚨 Ағып кету бар ма?</button>
+      <button onclick="aiAnswer('forecast')">🔮 Болжам жаса</button>
+    </div>
+    <div id="aiResponse" class="ai-response">
+      <h3>💡 AquaAI ұсынысы</h3>
+      <p>Жоғарыдағы батырмалардың бірін таңдаңыз.</p>
+    </div>
+
+    <div class="chat">
+      <input id="question" placeholder="Мысалы: «Айына қанша литр үнемдей аламын?»">
+      <button onclick="askAI()">Жіберу</button>
+    </div>
+  </section>
+
+  <section id="goals" class="section">
+    <h2>🌱 Eco Score және мақсаттар</h2>
+    <div class="eco">
+      <div class="circle"><span id="ecoNumber">82</span><small>/100</small></div>
+      <div>
+        <h3>Сіздің экологиялық деңгейіңіз: Жақсы</h3>
+        <p>90 баллға жету үшін кранды қажетсіз ашық қалдырмаңыз және душ уақытын қысқартыңыз.</p>
+      </div>
+    </div>
+
+    <div class="goals">
+      <div class="goal done">✅ 100 литр су үнемдеу <b>Орындалды</b></div>
+      <div class="goal">🚿 Душ уақытын 10 минутқа түсіру <b>+5 балл</b></div>
+      <div class="goal">🚰 Кранды босқа ашық қалдырмау <b>+4 балл</b></div>
+      <div class="goal">🏆 1 ай бойы эко-режим сақтау <b>+10 балл</b></div>
+    </div>
+
+    <div class="leaderboard">
+      <h3>🏆 Эко-рейтинг</h3>
+      <p>🥇 7А сыныбы — 8 420 л үнемдеді</p>
+      <p>🥈 7Б сыныбы — 7 950 л үнемдеді</p>
+      <p>🥉 8А сыныбы — 7 420 л үнемдеді</p>
+    </div>
+  </section>
+
+  <footer>
+    <b>AquaSmart</b> — суды үнемдеу мәдениетін қалыптастыратын цифрлық жүйе.
+    <br><small>Демонстрациялық нұсқа: AquaAI жауаптары локалды ережелер мен модельденген деректер арқылы көрсетіледі.</small>
+  </footer>
+</div>
+
+<script>
+const dataSets = {
+ daily:{labels:['Дүй','Сей','Сәр','Бей','Жұма','Сен','Жек'],data:[150,120,180,140,110,200,190],label:'Күнделікті тұтыну (л)'},
+ weekly:{labels:['1-апта','2-апта','3-апта','4-апта'],data:[1050,980,1120,890],label:'Апталық тұтыну (л)'},
+ monthly:{labels:['Қаң','Ақп','Нау','Сәу','Мам','Маус'],data:[4200,3900,4100,3800,3500,3200],label:'Айлық тұтыну (л)'}
+};
+
+const ctx=document.getElementById('waterChart').getContext('2d');
+let waterChart=new Chart(ctx,{
+ type:'line',
+ data:{labels:dataSets.daily.labels,datasets:[{label:dataSets.daily.label,data:dataSets.daily.data,
+ backgroundColor:'rgba(2,136,209,.15)',borderColor:'#0288d1',borderWidth:3,fill:true,tension:.35,
+ pointRadius:4}]},
+ options:{responsive:true,plugins:{legend:{display:true}},scales:{y:{beginAtZero:true}}}
+});
+
+function updateChart(period){
+ waterChart.data.labels=dataSets[period].labels;
+ waterChart.data.datasets[0].data=dataSets[period].data;
+ waterChart.data.datasets[0].label=dataSets[period].label;
+ waterChart.update();
+}
+
+function showSection(id,btn){
+ document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+ btn.classList.add('active');
+}
+
+function calculate(){
+ const shower=+document.getElementById('shower').value||0;
+ const faucet=+document.getElementById('faucet').value||0;
+ const washing=+document.getElementById('washing').value||0;
+ const family=+document.getElementById('family').value||1;
+
+ const showerL=shower*12*family*30;
+ const faucetL=faucet*9*family*30;
+ const washingL=washing*4*50;
+ const total=Math.round(showerL+faucetL+washingL);
+ const saved=Math.round(total*.35);
+ const money=Math.round(saved/1000*120);
+
+ document.getElementById('totalWater').textContent=total.toLocaleString()+' л';
+ document.getElementById('savedWater').textContent=saved.toLocaleString()+' л';
+ document.getElementById('savedMoney').textContent=money.toLocaleString()+' ₸';
+ document.getElementById('calcResult').classList.remove('hidden');
+
+ let tips=[];
+ if(shower>10) tips.push('🚿 Душ уақыты жоғары. 8–10 минутқа қысқартсаңыз, су шығыны азаяды.');
+ if(faucet>10) tips.push('🚰 Кранды қажетсіз ашық қалдырмаңыз. Аэратор қолдану да көмектеседі.');
+ if(washing>3) tips.push('🧺 Кір жуғыш машинаны толық жүктемемен қолдану тиімді.');
+ if(total>12000) tips.push('⚠️ Жалпы шығын жоғары. AquaAI арқылы жеке үнемдеу жоспарын жасаңыз.');
+ if(!tips.length) tips.push('✅ Өте жақсы! Сіздің көрсеткіштеріңіз үнемді тұтынуға жақын.');
+ document.getElementById('recommendations').innerHTML='<h3>🤖 AquaAI автоматты талдауы</h3><ul>'+tips.map(x=>'<li>'+x+'</li>').join('')+'</ul>';
+ document.getElementById('moneySave').textContent=money.toLocaleString()+' ₸';
+}
+
+function aiAnswer(type){
+ const responses={
+ analysis:'📈 Талдау: негізгі шығын душ пен кранға байланысты. Күнделікті әдеттерді аздап өзгерту арқылы айлық тұтынуды шамамен 10–20% төмендетуге болады.',
+ saving:'💧 Ұсыныс: душ уақытын қысқарту, кранды босқа ашық қалдырмау және кір жуғыш машинаны толық жүктеу — ең тиімді алғашқы қадамдар.',
+ leak:'🚨 Бақылау: түнгі су шығыны жоғары болса, крандарды, бачокты және құбырларды тексеріңіз. Нақты анықтау үшін су есептегіш көрсеткішін уақыт бойынша салыстыру қажет.',
+ forecast:'🔮 Болжам: қазіргі деректер бойынша тұтыну төмендеу бағытында. Үнемдеу әдеттері сақталса, келесі айда шамамен 3 050 л деңгейіне түсуі мүмкін.'
+ };
+ document.getElementById('aiResponse').innerHTML='<h3>💡 AquaAI</h3><p>'+responses[type]+'</p>';
+}
+
+function askAI(){
+ const q=document.getElementById('question').value.trim();
+ if(!q){return;}
+ let answer='Сұрағыңызды түсіндім. AquaAI демо-нұсқасы су тұтыну, үнемдеу және болжам тақырыптарында кеңес береді.';
+ if(q.toLowerCase().includes('үнем')||q.toLowerCase().includes('литр')) answer='💧 Егер су тұтынуды 10–15% қысқартсаңыз, айлық шығыннан едәуір көлемде су сақтауға болады. Нақты есеп үшін «Калькулятор» бөліміндегі деректерді енгізіңіз.';
+ if(q.toLowerCase().includes('ағып')) answer='🚨 Ағып кетуді тексеру үшін барлық крандарды жауып, есептегіш көрсеткішінің өзгеруін бақылаңыз. Бұл демонстрациялық жүйеде нақты датчик жоқ.';
+ document.getElementById('aiResponse').innerHTML='<h3>🤖 AquaAI жауабы</h3><p>'+answer+'</p>';
+ document.getElementById('question').value='';
+}
+</script>
+</body>
+</html>
